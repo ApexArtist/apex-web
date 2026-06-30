@@ -1,140 +1,228 @@
-# Apex Artist — Setup Guide
+# Apex Artist 🎨
 
-AI Art & Prompt sharing platform. Zero cost, fully free tier.
+A modern, community-driven platform for 3D artists, VFX creators, and prompt engineers to showcase, share, and discover AI-generated and digital artwork.
 
-## Stack
-- **Frontend + API**: Next.js 14 on Vercel (free)
-- **Database + Auth**: Supabase (free tier)
-- **Image Storage + CDN**: Cloudinary (free tier)
+**Live Demo**: Coming Soon 🚀
 
 ---
 
-## 1. Supabase Setup
+## ✨ Features
 
-1. Go to [supabase.com](https://supabase.com) → New Project
-2. **SQL Editor** → paste `supabase-schema.sql` → Run
-3. **Authentication → Providers → Google** → Enable:
-   - Get credentials from [Google Cloud Console](https://console.cloud.google.com)
-   - Create OAuth 2.0 Client ID (Web application)
-   - Authorized redirect URIs: `https://YOUR_PROJECT.supabase.co/auth/v1/callback`
-   - Paste Client ID + Secret into Supabase
-4. **Authentication → URL Configuration**:
+- 🎯 **Browse & Discover** - Explore artwork gallery with tag filtering and sorting
+- 📤 **Upload & Share** - Share your prompts, models, and AI art with the community
+- 👤 **Artist Profiles** - Create portfolio pages showcasing your work
+- ❤️ **Like & Save** - Bookmark favorite pieces for later viewing
+- 🏷️ **Tagging System** - Organize work by tags (3D, Blender, VFX, Editing, Concept, etc.)
+- 🔐 **Authentication** - Google OAuth + Email/Password with Supabase
+- 📱 **Fully Responsive** - Works on desktop, tablet, and mobile
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology | Status |
+|-------|-----------|--------|
+| **Frontend** | Next.js 14 (App Router), React, TypeScript, Tailwind CSS | ✅ Production |
+| **Backend** | Next.js API Routes, Supabase | ✅ Production |
+| **Database** | PostgreSQL (Supabase) | ✅ Production |
+| **Auth** | Supabase Auth (Google OAuth + Email/Password) | ✅ Production |
+| **Storage** | Cloudinary CDN | ✅ Production |
+| **Hosting** | Vercel (auto-deploy from GitHub) | ✅ Configured |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- Git
+- [Supabase](https://supabase.com) account (free)
+- [Cloudinary](https://cloudinary.com) account (free)
+
+### Local Development
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ApexArtist/apex-web.git
+   cd apex-web
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   Fill in your Supabase and Cloudinary credentials
+
+4. **Run development server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000)
+
+### Environment Variables
+
+Required variables in `.env.local`:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
+NEXT_PUBLIC_CLOUDINARY_API_KEY=your_api_key
+```
+
+---
+
+## 📋 Setup Guide
+
+### 1. Supabase Database
+
+1. Create a [Supabase](https://supabase.com) project
+2. In **SQL Editor**, run the `supabase-schema.sql` script
+3. Enable **Google OAuth**:
+   - Settings → Authentication → Providers → Google
+   - Get OAuth credentials from [Google Cloud Console](https://console.cloud.google.com)
+   - Add redirect URI: `https://your-project.supabase.co/auth/v1/callback`
+4. Configure **Site URL**:
+   - Settings → Authentication → URL Configuration
    - Site URL: `https://your-vercel-url.vercel.app`
    - Redirect URLs: `https://your-vercel-url.vercel.app/auth/callback`
-5. Copy from **Settings → API**:
-   - `Project URL`
+5. Copy credentials from **Settings → API**:
+   - Project URL
    - `anon public` key
    - `service_role` key (keep secret!)
 
----
+### 2. Cloudinary Storage
 
-## 2. Cloudinary Setup
-
-1. Sign up at [cloudinary.com](https://cloudinary.com) (free)
-2. Go to **Settings → Upload → Upload Presets**
-3. Click **Add upload preset**:
-   - Preset name: `apex_artist_unsigned`
-   - Signing mode: **Unsigned**
+1. Sign up at [Cloudinary](https://cloudinary.com)
+2. Create an **Upload Preset**:
+   - Go to Settings → Upload → Upload Presets
+   - Add preset named `apex_artist_unsigned`
+   - Signing mode: Unsigned
    - Folder: `apex-artist`
-4. Copy your **Cloud Name** from the dashboard
+3. Copy your **Cloud Name** from dashboard
+
+### 3. Deploy to Vercel
+
+1. Push code to GitHub (already done)
+2. Go to [Vercel](https://vercel.com)
+3. Click **New Project** → Import from GitHub
+4. Select `apex-web` repository
+5. Add environment variables from step 1 & 2
+6. Click **Deploy**
+
+Every push to `main` auto-deploys! 🚀
 
 ---
 
-## 3. Local Development
+## 📁 Project Structure
+
+```
+apex-web/
+├── app/                      # Next.js App Router
+│   ├── page.tsx             # Homepage
+│   ├── layout.tsx           # Root layout
+│   ├── gallery/             # Gallery browsing
+│   │   ├── page.tsx         # Gallery grid
+│   │   └── [id]/            # Post detail
+│   ├── upload/              # Upload form (protected)
+│   ├── artists/             # Artists directory
+│   │   └── [username]/      # Artist profile
+│   ├── auth/                # Authentication
+│   ├── profile/             # User profile
+│   └── api/                 # API routes
+├── components/              # Reusable React components
+├── lib/                     # Utilities
+│   ├── supabase/            # Supabase clients
+│   ├── cloudinary.ts        # Image upload helpers
+│   └── types.ts             # TypeScript types
+├── public/                  # Static assets
+├── middleware.ts            # Route protection
+└── supabase-schema.sql      # Database schema
+```
+
+---
+
+## 🎨 Key Pages
+
+| Route | Purpose | Status |
+|-------|---------|--------|
+| `/` | Homepage | ✅ Live |
+| `/gallery` | Browse all artwork | ✅ Live |
+| `/gallery/[id]` | View single post | ✅ Live |
+| `/upload` | Share new artwork | ✅ Live (Protected) |
+| `/artists` | Community directory | ✅ Live |
+| `/artists/[username]` | Artist portfolio | ✅ Live |
+| `/profile/setup` | Onboarding | ✅ Live |
+| `/profile/edit` | Edit profile | ✅ Live |
+| `/auth` | Login/Signup | ✅ Live |
+
+---
+
+## 🛠️ Available Scripts
 
 ```bash
-# Clone your repo
-git clone https://github.com/yourusername/apex-artist
-cd apex-artist
+# Development
+npm run dev              # Start dev server on port 3000
 
-# Install dependencies
-npm install
+# Production
+npm run build            # Build for production
+npm run start            # Start production server
 
-# Set up environment variables
-cp .env.local.example .env.local
-# Edit .env.local with your keys
-
-# Run dev server
-npm run dev
+# Database
+npm run db:push          # Sync schema (if using migrations)
 ```
-
-Open [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 4. Deploy to Vercel
+## 📦 Database Schema
 
-1. Push to GitHub
-2. Go to [vercel.com](https://vercel.com) → Import project
-3. Add all environment variables from `.env.local`
-4. Deploy!
+Key tables:
+- **profiles** - User profiles with avatars, bios, social links
+- **posts** - Artwork submissions with prompts, models, tags
+- **likes** - User likes on posts
+- **saves** - User bookmarks/saves
+- **auth.users** - Supabase auth users
 
-**Environment variables to add in Vercel:**
-```
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-NEXT_PUBLIC_APP_URL
-```
-
-5. After deploy, update in Supabase:
-   - Auth → URL Configuration → Site URL = your Vercel URL
-   - Auth → URL Configuration → Redirect URLs = `https://yourapp.vercel.app/auth/callback`
-   - Google OAuth → Authorized redirect URIs (in Google Cloud Console)
+See `supabase-schema.sql` for complete schema.
 
 ---
 
-## 5. Google OAuth Setup (Detailed)
+## 🔐 Security
 
-1. Go to [console.cloud.google.com](https://console.cloud.google.com)
-2. Create new project or use existing
-3. **APIs & Services → OAuth consent screen** → External → Fill details
-4. **APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID**
-   - Application type: Web application
-   - Authorized JavaScript origins: `https://YOUR_PROJECT.supabase.co`
-   - Authorized redirect URIs: `https://YOUR_PROJECT.supabase.co/auth/v1/callback`
-5. Copy Client ID + Client Secret → paste into Supabase Auth → Google
+- ✅ Google OAuth via Supabase
+- ✅ Route protection middleware for `/upload`
+- ✅ Row-Level Security (RLS) on database tables
+- ✅ Environment variables in `.env.local` (never committed)
+- ✅ Cloudinary unsigned uploads for safe client-side uploads
 
 ---
 
-## Free Tier Limits
+## 🤝 Contributing
 
-| Service | Limit | Notes |
-|---------|-------|-------|
-| Vercel | Unlimited deploys | 100GB bandwidth/month |
-| Supabase | 500MB database | Pauses after 1 week inactivity* |
-| Cloudinary | 25GB storage | 25GB bandwidth/month |
-
-*Visit Supabase dashboard weekly to keep project active on free tier.
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
-## File Structure
+## 📄 License
 
-```
-apex-artist/
-├── app/
-│   ├── page.tsx              ← Homepage
-│   ├── auth/
-│   │   ├── page.tsx          ← Sign in / Sign up
-│   │   └── callback/route.ts ← OAuth callback + profile creation
-│   ├── profile/
-│   │   ├── setup/page.tsx    ← New user profile wizard
-│   │   └── edit/page.tsx     ← Edit profile
-│   ├── artists/
-│   │   └── [username]/page.tsx ← Public artist profile
-│   ├── gallery/              ← Browse posts (add yourself)
-│   └── upload/               ← Upload new post (add yourself)
-├── components/
-│   └── Navbar.tsx
-├── lib/
-│   ├── supabase/
-│   │   ├── client.ts         ← Browser client
-│   │   └── server.ts         ← Server client
-│   ├── cloudinary.ts         ← Upload utility
-│   └── types.ts              ← TypeScript types
-├── middleware.ts              ← Auth protection
-└── supabase-schema.sql       ← Run this in Supabase first!
-```
+This project is open source and available under the MIT License.
+
+---
+
+## 📞 Support
+
+Have questions? Open an issue on [GitHub Issues](https://github.com/ApexArtist/apex-web/issues)
+
+---
+
+**Made with ❤️ for the 3D/VFX community**
