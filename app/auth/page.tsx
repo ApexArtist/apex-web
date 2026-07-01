@@ -18,12 +18,23 @@ function AuthContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
+  const authError = searchParams.get('error')
+  const authErrorMessage = searchParams.get('message')
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) router.replace(redirect)
     })
   }, [])
+
+  useEffect(() => {
+    if (authError) {
+      setMessage({
+        type: 'error',
+        text: authErrorMessage || 'Authentication callback failed. Please try again.',
+      })
+    }
+  }, [authError, authErrorMessage])
 
   const signInWithGoogle = async () => {
     setOauthLoading(true)

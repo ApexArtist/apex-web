@@ -55,7 +55,10 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.redirect(`${origin}${redirect}`)
     }
+
+    const errorMessage = error?.message || 'Authentication callback failed'
+    return NextResponse.redirect(`${origin}/auth?error=callback_failed&message=${encodeURIComponent(errorMessage)}`)
   }
 
-  return NextResponse.redirect(`${origin}/auth?error=callback_failed`)
+  return NextResponse.redirect(`${origin}/auth?error=callback_failed&message=${encodeURIComponent('Missing callback code.')}`)
 }

@@ -1,8 +1,17 @@
 # Apex Artist 🎨
 
-A modern, community-driven platform for 3D artists, VFX creators, and prompt engineers to showcase, share, and discover AI-generated and digital artwork.
+A modern website for 3D artists and AI art creators to showcase, share, and discover digital artwork.
 
 **Live Demo**: Coming Soon 🚀
+
+## 📘 Project Context
+
+- Built as an internal Apex Artist website, not a public open-source project.
+- Git repository: `https://github.com/ApexArtist/apex-web.git`
+- Uses Next.js 14 App Router, TypeScript, Tailwind CSS, Supabase, and Cloudinary.
+- Key paths: `app/`, `components/`, `lib/`, `middleware.ts`, `supabase-schema.sql`.
+- Auth and backend flows are implemented with Supabase client/server helpers.
+- This README is intended to provide clear setup, deployment, and continuation guidance for maintainers and automation agents.
 
 ---
 
@@ -34,17 +43,17 @@ A modern, community-driven platform for 3D artists, VFX creators, and prompt eng
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 18+
 - Git
-- [Supabase](https://supabase.com) account (free)
-- [Cloudinary](https://cloudinary.com) account (free)
+- [Supabase](https://supabase.com) account
+- [Cloudinary](https://cloudinary.com) account
 
 ### Local Development
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ApexArtist/apex-web.git
-   cd apex-web
+   git clone https://github.com/ApexArtist/apex-artist.git
+   cd apex-artist
    ```
 
 2. **Install dependencies**
@@ -53,10 +62,13 @@ A modern, community-driven platform for 3D artists, VFX creators, and prompt eng
    ```
 
 3. **Set up environment variables**
+   ```powershell
+   copy .env.local.example .env.local
+   ```
+   or on macOS/Linux:
    ```bash
    cp .env.local.example .env.local
    ```
-   Fill in your Supabase and Cloudinary credentials
 
 4. **Run development server**
    ```bash
@@ -67,12 +79,14 @@ A modern, community-driven platform for 3D artists, VFX creators, and prompt eng
 ### Environment Variables
 
 Required variables in `.env.local`:
-```
+
+```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
-NEXT_PUBLIC_CLOUDINARY_API_KEY=your_api_key
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=apex_artist_unsigned
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ---
@@ -81,8 +95,8 @@ NEXT_PUBLIC_CLOUDINARY_API_KEY=your_api_key
 
 ### 1. Supabase Database
 
-1. Create a [Supabase](https://supabase.com) project
-2. In **SQL Editor**, run the `supabase-schema.sql` script
+1. Create a [Supabase](https://supabase.com) project.
+2. In **SQL Editor**, run `supabase-schema.sql`.
 3. Enable **Google OAuth**:
    - Settings → Authentication → Providers → Google
    - Get OAuth credentials from [Google Cloud Console](https://console.cloud.google.com)
@@ -94,26 +108,26 @@ NEXT_PUBLIC_CLOUDINARY_API_KEY=your_api_key
 5. Copy credentials from **Settings → API**:
    - Project URL
    - `anon public` key
-   - `service_role` key (keep secret!)
+   - `service_role` key (keep secret)
 
 ### 2. Cloudinary Storage
 
-1. Sign up at [Cloudinary](https://cloudinary.com)
+1. Sign up at [Cloudinary](https://cloudinary.com).
 2. Create an **Upload Preset**:
-   - Go to Settings → Upload → Upload Presets
-   - Add preset named `apex_artist_unsigned`
+   - Settings → Upload → Upload Presets
+   - Preset name: `apex_artist_unsigned`
    - Signing mode: Unsigned
    - Folder: `apex-artist`
-3. Copy your **Cloud Name** from dashboard
+3. Copy your **Cloud Name** from the dashboard.
 
 ### 3. Deploy to Vercel
 
-1. Push code to GitHub (already done)
-2. Go to [Vercel](https://vercel.com)
-3. Click **New Project** → Import from GitHub
-4. Select `apex-web` repository
-5. Add environment variables from step 1 & 2
-6. Click **Deploy**
+1. Push code to GitHub.
+2. Go to [Vercel](https://vercel.com).
+3. Click **New Project** → Import from GitHub.
+4. Select the `apex-artist` repository.
+5. Add environment variables from step 1 & 2.
+6. Click **Deploy**.
 
 Every push to `main` auto-deploys! 🚀
 
@@ -122,27 +136,27 @@ Every push to `main` auto-deploys! 🚀
 ## 📁 Project Structure
 
 ```
-apex-web/
+apex-artist/
 ├── app/                      # Next.js App Router
-│   ├── page.tsx             # Homepage
-│   ├── layout.tsx           # Root layout
-│   ├── gallery/             # Gallery browsing
-│   │   ├── page.tsx         # Gallery grid
-│   │   └── [id]/            # Post detail
-│   ├── upload/              # Upload form (protected)
-│   ├── artists/             # Artists directory
-│   │   └── [username]/      # Artist profile
-│   ├── auth/                # Authentication
-│   ├── profile/             # User profile
-│   └── api/                 # API routes
-├── components/              # Reusable React components
-├── lib/                     # Utilities
-│   ├── supabase/            # Supabase clients
-│   ├── cloudinary.ts        # Image upload helpers
-│   └── types.ts             # TypeScript types
-├── public/                  # Static assets
-├── middleware.ts            # Route protection
-└── supabase-schema.sql      # Database schema
+│   ├── page.tsx              # Homepage
+│   ├── layout.tsx            # Root layout
+│   ├── gallery/              # Gallery browsing
+│   │   ├── page.tsx          # Gallery grid
+│   │   └── [id]/             # Post detail
+│   ├── upload/               # Upload form (protected)
+│   ├── artists/              # Artists directory
+│   │   └── [username]/       # Artist profile
+│   ├── auth/                 # Authentication pages and callback
+│   ├── profile/              # User profile flows
+│   └── api/                  # API routes
+├── components/               # Reusable React components
+├── lib/                      # Utilities
+│   ├── supabase/             # Supabase clients
+│   ├── cloudinary.ts         # Image upload helpers
+│   └── types.ts              # TypeScript types
+├── public/                   # Static assets
+├── middleware.ts             # Route protection
+└── supabase-schema.sql       # Database schema
 ```
 
 ---
@@ -172,9 +186,7 @@ npm run dev              # Start dev server on port 3000
 # Production
 npm run build            # Build for production
 npm run start            # Start production server
-
-# Database
-npm run db:push          # Sync schema (if using migrations)
+npm run lint             # Run ESLint
 ```
 
 ---
@@ -196,33 +208,15 @@ See `supabase-schema.sql` for complete schema.
 
 - ✅ Google OAuth via Supabase
 - ✅ Route protection middleware for `/upload`
-- ✅ Row-Level Security (RLS) on database tables
+- ✅ Recommended Row-Level Security (RLS) on database tables
 - ✅ Environment variables in `.env.local` (never committed)
-- ✅ Cloudinary unsigned uploads for safe client-side uploads
 
 ---
 
-## 🤝 Contributing
+## 📌 Notes
 
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+This README documents the Apex Artist website setup and deployment. It is intended for internal use and maintenance rather than public contribution.
 
 ---
 
-## 📄 License
-
-This project is open source and available under the MIT License.
-
----
-
-## 📞 Support
-
-Have questions? Open an issue on [GitHub Issues](https://github.com/ApexArtist/apex-web/issues)
-
----
-
-**Made with ❤️ for the 3D/VFX community**
+**Made with ❤️ for the creative AI content creators community**
